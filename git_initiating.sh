@@ -77,13 +77,19 @@ info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_
   else
       info ".gitignore already exists (-f to overwrite)"
   fi
-  if [[ ! -f "${SCRIPT_NAME}.md" ]] || [[ $flagOptForce = 1 ]]; then
-      printf "# ${SCRIPT_NAME} USAGE\n<pre>\n" > "${SCRIPT_NAME}.md"
-      usagefull >> "${SCRIPT_NAME}.md"
-      printf "\n</pre>\n" >> "${SCRIPT_NAME}.md"
-      info "${SCRIPT_NAME}.md created"
+  if [[ ! -f "README.md" ]] || [[ $flagOptForce = 1 ]]; then
+      SCRIPT_GIT_REPO=$(git config --get remote.origin.url)
+      info $SCRIPT_GIT_REPO
+      cat "$HOME/GIT/dockworker/s_public_tools/git_initiating.lib/README.md" | sed -e "s<\$SCRIPT_GIT_REPO<$SCRIPT_GIT_REPO<g" > README.md.new
+      info "README.md created"
   else
-      info "${SCRIPT_NAME}.md already exists (-f to overwrite)"
+      info "README.md already exists (-f to overwrite)"
+  fi
+  if [[ ! -f "LICENSE" ]] || [[ $flagOptForce = 1 ]]; then
+      curl https://www.gnu.org/licenses/gpl-3.0.md > LICENSE
+      info "LICENSE created"
+  else
+      info "LICENSE already exists (-f to overwrite)"
   fi
 
 
