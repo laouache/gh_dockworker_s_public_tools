@@ -35,3 +35,16 @@ function existing_command()
   # fi
 }
 export -f existing_command
+function existing_file()
+{
+  [ -f "$1" ]
+  # EXAMPLE
+  # if existing_file bash.sh; then
+  #  echo 'file bash.sh exists!'
+  # else
+  #  echo 'file bash.sh does not exists'
+  # fi
+}
+export -f existing_file
+
+
