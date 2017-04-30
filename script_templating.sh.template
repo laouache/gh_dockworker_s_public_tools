@@ -6,10 +6,8 @@
 #+    ${SCRIPT_NAME} [-hv] [-o[file]] args ...
 #%
 #% DESCRIPTION
-#%    initiating a git repository with :
-#%    .gitignore
-#%    LICENSE
-#%    README.md
+#%    This is a script template
+#%    to start any good shell script.
 #%
 #% OPTIONS
 #%    -o [file], --output=[file]    Set log file (default=/dev/null)
@@ -33,7 +31,8 @@
 #-
 #================================================================
 #  HISTORY
-#     SEE GIT REPOSITORY
+#     2015/03/01 : mvongvilay : Script creation
+#     2015/04/01 : mvongvilay : Add long options and improvements
 # 
 #================================================================
 #  DEBUG OPTION
