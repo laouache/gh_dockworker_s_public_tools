@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "tools verbose : $VERBOSE"
+echo "$VERBOSE=$VERBOSE"
 
 function logging () {
   if [ -n "$1" ]
@@ -24,13 +24,14 @@ function printing () {
   echo -e "$IN"
 }
 export -f printing
-
-[ -z ${APP_CONFIGURATION_DIR+x} ] && #APP_CONFIGURATION_DIR non défini \
-    [ -d ~/dockworker/docker-configurations/$USER@$HOSTNAME/ ] && #dossier existe \ 
-    export APP_CONFIGURATION_DIR=~/dockworker/docker-configurations/$USER@$HOSTNAME/
-
-[ -z ${APP_CONFIGURATION_DIR+x} ] && #APP_CONFIGURATION_DIR non défini \
-    printing "APP_CONFIGURATION_DIR non existant"
-[ -z ${APP_CONFIGURATION_DIR+x} ] || #APP_CONFIGURATION_DIR défini \
-    printing "APP_CONFIGURATION_DIR=${APP_CONFIGURATION_DIR}"
-
+function existing()
+{
+  command -v "$1" >/dev/null 2>&1
+  # EXAMPLE
+  # if existing bash; then
+  #  echo 'Bash exists!'
+  # else
+  #  echo 'Your system does not have Bash'
+  # fi
+}
+export -f existing
