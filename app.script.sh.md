@@ -27,12 +27,13 @@ $ ./template.sh 2>&1 1>/dev/null & sleep 1 && ./template.sh
 </pre>
 In the output, you can see notice each line starts with a kind of tag :
 
-[I] for Information
-[C] for executed Command
-[O] for Output of the executed command
-[E] for Error
-[W] for Warning
+- [I] for Information
+- [C] for executed Command
+- [O] for Output of the executed command
+- [E] for Error
+- [W] for Warning
+
 This script should catch the following signal:
 
-INT signal, which is usually sent by CTL+C
-TERM signal, which can be sent with kill -TERM -<script PID>
+- INT signal, which is usually sent by CTL+C
+- TERM signal, which can be sent with kill -TERM -<script PID>
