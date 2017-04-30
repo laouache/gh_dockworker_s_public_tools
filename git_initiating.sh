@@ -77,7 +77,9 @@ info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_
       info ".gitignore already exists (-x to overwrite)"
   fi
   if [[ ! -f "${SCRIPT_NAME}.md" ]] || [[ $flagOptIgnoreLock = 1 ]]; then
-      usagefull > "${SCRIPT_NAME}.md"
+      printf "# ${SCRIPT_NAME} USAGE\n<pre>\n" > "${SCRIPT_NAME}.md"
+      usagefull >> "${SCRIPT_NAME}.md"
+      printf "\n</pre>\n" >> "${SCRIPT_NAME}.md"
       info "${SCRIPT_NAME}.md created"
   else
       info "${SCRIPT_NAME}.md already exists (-x to overwrite)"

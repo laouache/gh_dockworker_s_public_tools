@@ -1,3 +1,5 @@
+# git_initiating.sh USAGE
+<pre>
  SYNOPSIS
     git_initiating.sh [-hv] [-o[file]] args ...
 
@@ -26,3 +28,5 @@
     license         GNU General Public License
     script_id       516981
 
+
+</pre>
