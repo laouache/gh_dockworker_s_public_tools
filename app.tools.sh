@@ -24,14 +24,14 @@ function printing () {
   echo -e "$IN"
 }
 export -f printing
-function existing()
+function existing_command()
 {
   command -v "$1" >/dev/null 2>&1
   # EXAMPLE
-  # if existing bash; then
+  # if existing_command bash; then
   #  echo 'Bash exists!'
   # else
   #  echo 'Your system does not have Bash'
   # fi
 }
-export -f existing
+export -f existing_command
