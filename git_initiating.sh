@@ -64,6 +64,10 @@ info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_
 #================================================================
   #== start your program here ==#
 
+  if [[ ! -d .git ]]; then
+      error ".git directory does not exist"
+      scriptfinish ;
+  fi
   if [[ ! -f ".gitignore" ]] || [[ $flagOptIgnoreLock = 1 ]]; then
       curl https://raw.githubusercontent.com/github/gitignore/master/Global/Windows.gitignore > .gitignore
       curl https://raw.githubusercontent.com/github/gitignore/master/Global/macOS.gitignore  >> .gitignore
@@ -72,6 +76,13 @@ info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_
   else
       info ".gitignore already exists (-x to overwrite)"
   fi
+  if [[ ! -f "${SCRIPT_NAME}.md" ]] || [[ $flagOptIgnoreLock = 1 ]]; then
+      usagefull > "${SCRIPT_NAME}.md"
+      info "${SCRIPT_NAME}.md created"
+  else
+      info "${SCRIPT_NAME}.md already exists (-x to overwrite)"
+  fi
+
 
 #sleep 5
 
