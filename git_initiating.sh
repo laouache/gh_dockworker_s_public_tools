@@ -78,9 +78,9 @@ info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_
       info ".gitignore already exists (-f to overwrite)"
   fi
   if [[ ! -f "README.md" ]] || [[ $flagOptForce = 1 ]]; then
-      SCRIPT_GIT_REPO=$(git config --get remote.origin.url)
+      SCRIPT_GIT_REPO="https://"$(git config --get remote.origin.url | cut -f2 -d"@" | sed -e "s<:</<" | sed -e "s<\.git<<")
       info $SCRIPT_GIT_REPO
-      cat "$HOME/GIT/dockworker/s_public_tools/git_initiating.lib/README.md" | sed -e "s<\$SCRIPT_GIT_REPO<$SCRIPT_GIT_REPO<g" > README.md.new
+      cat "$HOME/GIT/dockworker/s_public_tools/git_initiating.lib/README.md" | sed -e "s<\$SCRIPT_GIT_REPO<$SCRIPT_GIT_REPO<g" > README.md
       info "README.md created"
   else
       info "README.md already exists (-f to overwrite)"

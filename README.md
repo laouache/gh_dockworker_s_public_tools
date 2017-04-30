@@ -1,3 +1,3 @@
-# git@gitlab.com:dockworker/s_public_tools.git
+# https://gitlab.com/dockworker/s_public_tools
 
-LICENSE:(git@gitlab.com:dockworker/s_public_tools.git/LICENSE)
+LICENSE:(https://gitlab.com/dockworker/s_public_tools/LICENSE)
