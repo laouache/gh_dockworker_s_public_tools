@@ -1,10 +1,13 @@
 This template contains header which is use for usage info as well, useful predefined functions and predefined variables, and manage short and long options.
 
 <h1>Check how this script template works</h1>
+
 Display help with the followins options -h --help --man
+
 and display script information only with -v --version
 
 Use -o or --output options to specify a output log file, otherwise no log file is created.
+
 Log file should contains exactly what you see in terminal output.
 <pre>
 # Execute with no log
