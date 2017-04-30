@@ -3,7 +3,7 @@
 # HEADER
 #================================================================
 #% SYNOPSIS
-#+    ${SCRIPT_NAME} [-hv] [-o[file]] args ...
+#+    ${SCRIPT_NAME} [-hv] [-o[file]] -f args ...
 #%
 #% DESCRIPTION
 #%    initiate a git directory with :
@@ -15,6 +15,7 @@
 #%    -o [file], --output=[file]    Set log file (default=/dev/null)
 #%                                  use DEFAULT keyword to autoname file
 #%                                  The default value is /dev/null.
+#%    -f, --force                   Force script to overwrite somes files
 #%    -t, --timelog                 Add timestamp to log ("+%y/%m/%d@%H:%M:%S")
 #%    -x, --ignorelock              Ignore if lock file exists
 #%    -h, --help                    Print this help
@@ -68,21 +69,21 @@ info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_
       error ".git directory does not exist"
       scriptfinish ;
   fi
-  if [[ ! -f ".gitignore" ]] || [[ $flagOptIgnoreLock = 1 ]]; then
+  if [[ ! -f ".gitignore" ]] || [[ $flagOptForce = 1 ]]; then
       curl https://raw.githubusercontent.com/github/gitignore/master/Global/Windows.gitignore > .gitignore
       curl https://raw.githubusercontent.com/github/gitignore/master/Global/macOS.gitignore  >> .gitignore
       curl https://raw.githubusercontent.com/github/gitignore/master/Global/Linux.gitignore  >> .gitignore
       info ".gitignore created"
   else
-      info ".gitignore already exists (-x to overwrite)"
+      info ".gitignore already exists (-f to overwrite)"
   fi
-  if [[ ! -f "${SCRIPT_NAME}.md" ]] || [[ $flagOptIgnoreLock = 1 ]]; then
+  if [[ ! -f "${SCRIPT_NAME}.md" ]] || [[ $flagOptForce = 1 ]]; then
       printf "# ${SCRIPT_NAME} USAGE\n<pre>\n" > "${SCRIPT_NAME}.md"
       usagefull >> "${SCRIPT_NAME}.md"
       printf "\n</pre>\n" >> "${SCRIPT_NAME}.md"
       info "${SCRIPT_NAME}.md created"
   else
-      info "${SCRIPT_NAME}.md already exists (-x to overwrite)"
+      info "${SCRIPT_NAME}.md already exists (-f to overwrite)"
   fi
 
 

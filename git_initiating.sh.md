@@ -1,7 +1,7 @@
 # git_initiating.sh USAGE
 <pre>
  SYNOPSIS
-    git_initiating.sh [-hv] [-o[file]] args ...
+    git_initiating.sh [-hv] [-o[file]] -f args ...
 
  DESCRIPTION
     initiate a git directory with :
@@ -13,6 +13,7 @@
     -o [file], --output=[file]    Set log file (default=/dev/null)
                                   use DEFAULT keyword to autoname file
                                   The default value is /dev/null.
+    -f, --force                   Force script to overwrite somes files
     -t, --timelog                 Add timestamp to log ("+%y/%m/%d@%H:%M:%S")
     -x, --ignorelock              Ignore if lock file exists
     -h, --help                    Print this help

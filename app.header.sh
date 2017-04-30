@@ -106,19 +106,21 @@ flagOptErr=0
 flagOptLog=0
 flagOptTimeLog=0
 flagOptIgnoreLock=0
+flagOptForce=0
 
 #============================
 #  PARSE OPTIONS WITH GETOPTS
 #============================
 
   #== set short options ==#
-SCRIPT_OPTS=':o:txhv-:'
+SCRIPT_OPTS=':o:txhvf-:'
 
   #== set long options associated with short one ==#
 typeset -A ARRAY_OPTS
 ARRAY_OPTS=(
   [timelog]=t
   [ignorelock]=x
+  [force]=f
   [output]=o
   [help]=h
   [man]=h
@@ -167,6 +169,9 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
         ;;
         
     x ) flagOptIgnoreLock=1
+        ;;
+        
+    f ) flagOptForce=1
         ;;
         
     h ) usagefull
