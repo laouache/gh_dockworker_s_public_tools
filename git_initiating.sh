@@ -6,10 +6,10 @@
 #+    ${SCRIPT_NAME} [-hv] [-o[file]] args ...
 #%
 #% DESCRIPTION
-#%    initiating a git repository with :
-#%    .gitignore
-#%    LICENSE
-#%    README.md
+#%    initiate a git directory with :
+#%    - .gitignore
+#%    - LICENSE with GNU v3
+#%    - README.md
 #%
 #% OPTIONS
 #%    -o [file], --output=[file]    Set log file (default=/dev/null)
@@ -25,15 +25,15 @@
 #%
 #================================================================
 #- IMPLEMENTATION
-#-    version         ${SCRIPT_NAME} (www.uxora.com) 0.0.4
-#-    author          Michel VONGVILAY
-#-    copyright       Copyright (c) http://www.uxora.com
+#-    version         ${SCRIPT_NAME} 0.0.1
+#-    author          dockworker
+#-    copyright       Copyright (c) https://gitlab.com/dockworker/s_public_tools/ 
 #-    license         GNU General Public License
-#-    script_id       12345
+#-    script_id       516981
 #-
 #================================================================
 #  HISTORY
-#     SEE GIT REPOSITORY
+#     SEE GIT
 # 
 #================================================================
 #  DEBUG OPTION
@@ -43,215 +43,14 @@
 #================================================================
 # END_OF_HEADER
 #================================================================
-trap 'error "${SCRIPT_NAME}: FATAL ERROR at $(date "+%HH%M") (${SECONDS}s): Interrupt signal intercepted! Exiting now..."
-      2>&1 | tee -a ${fileLog:-/dev/null} >&2 ;
-      exit 99;' INT QUIT TERM
-trap 'cleanup' EXIT
 
-#============================
-#  FUNCTIONS
-#============================
-  #== exec_cmd function ==#
-exec_cmd() {
-  {
-    ${*}
-  rc_save
-  } 2>&1 | fecho CAT "${*}"
-  rc_restore
-  rc_assert "Command failed: ${*}"
-  return $rc ;
-}
-
-  #== fecho function ==#
-fecho() {
-  myType=${1} ; shift ;
-  [[ ${SCRIPT_TIMELOG_FLAG:-0} -ne 0 ]] && printf "$( date ${SCRIPT_TIMELOG_FORMAT} )"
-  printf "[${myType%[A-Z][A-Z]}] ${*}\n"
-  if [[ "${myType}" = CAT ]]; then
-    if [[ ${SCRIPT_TIMELOG_FLAG:-0} -eq 0 ]]; then
-        cat -un - | awk '$0="[O] "$0; fflush();' ;
-    elif [[ "${GNU_AWK_FLAG}" ]]; then # fast - compatible linux
-        cat -un - | awk -v tformat=${SCRIPT_TIMELOG_FORMAT#+} '$0=strftime(tformat)"[O] "$0; fflush();' ; 
-    else # average speed and more resource intensive- compatible unix/linux
-        cat -un - | while read LINE; do \
-            [[ ${OLDSECONDS:=$(( ${SECONDS}-1 ))} -lt ${SECONDS} ]] && OLDSECONDS=$(( ${SECONDS}+1 )) \
-            && TSTAMP="$( date ${SCRIPT_TIMELOG_FORMAT} )"; printf "${TSTAMP}[O] ${LINE}\n"; \
-        done 
-    fi
-  fi
-}
-
-  #== custom function ==#
-check_cre_file() {
-    myFile=${1}
-    [[ "${myFile}" = "/dev/null" ]] && return 0
-    [[ -e ${myFile} ]] && error "${SCRIPT_NAME}: ${myFile}: File already exists" && return 1
-    touch ${myFile} 2>&1 1>/dev/null
-    [[ $? -ne 0 ]] && error "${SCRIPT_NAME}: ${myFile}: Cannot create file" && return 2
-    rm -f ${myFile} 2>&1 1>/dev/null
-    [[ $? -ne 0 ]] && error "${SCRIPT_NAME}: ${myFile}: Cannot delete file" && return 3
-    return 0
-}
-
-#============================
-#  ALIAS AND FUNCTIONS
-#============================
-
-  #== error management function ==#
-info() { fecho INF "${*}"; }
-warning() { fecho WRN "WARNING: ${*}" 1>&2; countWrn=$(( ${countWrn} + 1 )); }
-error() { fecho ERR "ERROR: ${*}" 1>&2; countErr=$(( ${countErr} + 1 )); }
-cleanup() { [[ -e "${fileRC}" ]] && rm ${fileRC}; [[ -e "${fileLock}" ]] && [[ "$( head -1 ${fileLock} )" = "${EXEC_ID}" ]] && rm ${fileLock}; }
-scriptfinish() { [[ $rc -eq 0 ]] && endType="INF" || endType="ERR";
-    fecho ${endType} "${SCRIPT_NAME} finished at $(date "+%HH%M") (Time=${SECONDS}s, Error=${countErr}, Warning=${countWrn}, RC=$rc).";
-    exit $rc ; }
-
-  #== usage function ==#
-usage() { printf "Usage: "; head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#+" | sed -e "s/^#+[ ]*//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
-usagefull() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#[%+-]" | sed -e "s/^#[%+-]//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
-scriptinfo() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#-" | sed -e "s/^#-//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g"; }
-
-  #== inter program return code function ==#
-rc_save() { rc=$? && echo $rc > ${fileRC} ; }
-rc_restore() { [[ -r "${fileRC}" ]] && rc=$(cat ${fileRC}) ; }
-rc_assert() { [[ $rc -ne 0 ]] && error "${*} (RC=$rc)"; }
-  
-#============================
-#  FILES AND VARIABLES
-#============================
-
-  #== general variables ==#
-SCRIPT_HEADSIZE=$(head -200 ${0} |grep -n "^# END_OF_HEADER" | cut -f1 -d:)
-SCRIPT_ID="$(scriptinfo | grep script_id | tr -s ' ' | cut -d' ' -f3)"
-SCRIPT_NAME="$(basename ${0})" # scriptname without path
-SCRIPT_UNIQ="${SCRIPT_NAME%.*}.${SCRIPT_ID}.$(date "+%y%m%d%H%M%S").${$}"
-SCRIPT_DIR="$( cd $(dirname "$0") && pwd )" # script directory
-SCRIPT_DIR_TEMP="/tmp" # Make sure temporary folder is RW
-
-SCRIPT_TIMELOG_FLAG=0
-SCRIPT_TIMELOG_FORMAT="+%y/%m/%d@%H:%M:%S"
-
-HOSTNAME="$(hostname)"
-FULL_COMMAND="${0} $*"
-EXEC_DATE=$(date "+%y%m%d%H%M%S")
-EXEC_ID=${$}
-GNU_AWK_FLAG="$(awk --version 2>/dev/null | head -1 | grep GNU)"
-
-fileRC="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ}.tmp.rc";
-fileLock="${SCRIPT_DIR_TEMP}/${SCRIPT_NAME%.*}.${SCRIPT_ID}.lock"
-fileLog="/dev/null"
-rc=0;
-
-countErr=0;
-countWrn=0;
-
-  #== option variables ==#
-flagOptErr=0
-flagOptLog=0
-flagOptTimeLog=0
-flagOptIgnoreLock=0
-
-#============================
-#  PARSE OPTIONS WITH GETOPTS
-#============================
-
-  #== set short options ==#
-SCRIPT_OPTS=':o:txhv-:'
-
-  #== set long options associated with short one ==#
-typeset -A ARRAY_OPTS
-ARRAY_OPTS=(
-  [timelog]=t
-  [ignorelock]=x
-  [output]=o
-  [help]=h
-  [man]=h
-)
-
-  #== parse options ==#
-while getopts ${SCRIPT_OPTS} OPTION ; do
-  #== translate long options to short ==#
-  if [[ "x$OPTION" == "x-" ]]; then
-    LONG_OPTION=$OPTARG
-    LONG_OPTARG=$(echo $LONG_OPTION | grep "=" | cut -d'=' -f2)
-    LONG_OPTIND=-1
-    [[ "x$LONG_OPTARG" = "x" ]] && LONG_OPTIND=$OPTIND || LONG_OPTION=$(echo $OPTARG | cut -d'=' -f1)
-    [[ $LONG_OPTIND -ne -1 ]] && eval LONG_OPTARG="\$$LONG_OPTIND"
-    OPTION=${ARRAY_OPTS[$LONG_OPTION]}
-    [[ "x$OPTION" = "x" ]] &&  OPTION="?" OPTARG="-$LONG_OPTION"
-    
-    if [[ $( echo "${SCRIPT_OPTS}" | grep -c "${OPTION}:" ) -eq 1 ]]; then
-      if [[ "x${LONG_OPTARG}" = "x" ]] || [[ "${LONG_OPTARG}" = -* ]]; then 
-        OPTION=":" OPTARG="-$LONG_OPTION"
-      else
-        OPTARG="$LONG_OPTARG";
-        if [[ $LONG_OPTIND -ne -1 ]]; then
-          [[ $OPTIND -le $Optnum ]] && OPTIND=$(( $OPTIND+1 ))
-          shift $OPTIND
-          OPTIND=1
-        fi
-      fi
-    fi
-  fi
-
-  #== options follow by another option instead of argument ==#
-  if [[ "x${OPTION}" != "x:" ]] && [[ "x${OPTION}" != "x?" ]] && [[ "${OPTARG}" = -* ]]; then 
-    OPTARG="$OPTION" OPTION=":"
-  fi
-  
-  #== manage options ==#
-  case "$OPTION" in
-    o ) fileLog="${OPTARG}"
-            [[ "${OPTARG}" = *"DEFAULT" ]] && fileLog="$( echo ${OPTARG} | sed -e "s/DEFAULT/${SCRIPT_UNIQ}.log/g" )"
-            flagOptLog=1
-        ;;
-        
-    t ) flagOptTimeLog=1
-            SCRIPT_TIMELOG_FLAG=1
-        ;;
-        
-    x ) flagOptIgnoreLock=1
-        ;;
-        
-    h ) usagefull
-            exit 0
-        ;;
-        
-    v ) scriptinfo
-            exit 0
-        ;;
-        
-    : ) error "${SCRIPT_NAME}: -$OPTARG: option requires an argument"
-            flagOptErr=1
-        ;;
-        
-    ? ) error "${SCRIPT_NAME}: -$OPTARG: unknown option"
-            flagOptErr=1
-        ;;
-  esac
-done
-shift $((${OPTIND} - 1)) ## shift options
-
-#============================
-#  MAIN SCRIPT
-#============================
-
-[ $flagOptErr -eq 1 ] && usage 1>&2 && exit 1 ## print usage if option error and exit
+if [ ! -f $HOME/GIT/dockworker/s_public_tools/app.tools.sh ]; then
+  git clone git@gitlab.com:dockworker/s_public_tools.git $HOME/GIT/dockworker/s_public_tools/
+fi
+source $HOME/GIT/dockworker/s_public_tools/app.header.sh
 
   #== Check/Set arguments ==#
-[[ $# -gt 2 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
-
-  #== Check files ==#
-check_cre_file ${fileRC}  || exit 3
-check_cre_file ${fileLog} || exit 3
-if [[ ${flagOptIgnoreLock} -eq 0 ]]; then
-    [[ -e ${fileLock} ]] && error "${SCRIPT_NAME}: ${fileLock}: lock file detected" && exit 4
-    check_cre_file ${fileLock} || exit 4
-fi
-
-  #== Create files ==#
-[[ "${fileLog}" != "/dev/null" ]] && touch ${fileLog} && fileLog="$( cd $(dirname "${fileLog}") && pwd )"/"$(basename ${fileLog})"
-[[ ! -e ${fileLock} ]] && echo "${EXEC_ID}" > ${fileLock}
+  [[ $# -gt 2 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
 
   #== Main part ==#
   #===============#
@@ -260,10 +59,26 @@ fi
 info "${SCRIPT_NAME}: start $(date "+%y/%m/%d@%H:%M:%S") with process id ${EXEC_ID} by ${USER}@${HOSTNAME}:${PWD}"\
     $( [[ ${flagOptLog} -eq 1 ]] && echo " (LOG: ${fileLog})" || echo " (NOLOG)" );
 
+#================================================================
+# START SCRIPT
+#================================================================
   #== start your program here ==#
-exec_cmd "ls -lrt $*"
+
+  if [[ ! -f ".gitignore" ]] || [[ $flagOptIgnoreLock = 1 ]]; then
+      curl https://raw.githubusercontent.com/github/gitignore/master/Global/Windows.gitignore > .gitignore
+      curl https://raw.githubusercontent.com/github/gitignore/master/Global/macOS.gitignore  >> .gitignore
+      curl https://raw.githubusercontent.com/github/gitignore/master/Global/Linux.gitignore  >> .gitignore
+      info ".gitignore created"
+  else
+      info ".gitignore already exists (-x to overwrite)"
+  fi
+
 #sleep 5
+
   #== end   your program here ==#
+#================================================================
+# END SCRIPT
+#================================================================
 
 scriptfinish ; } 2>&1 | tee ${fileLog}
 
@@ -271,3 +86,4 @@ scriptfinish ; } 2>&1 | tee ${fileLog}
   #=========#
 rc_restore
 exit $rc
+

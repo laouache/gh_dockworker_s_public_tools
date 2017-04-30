@@ -42,7 +42,10 @@
 # END_OF_HEADER
 #================================================================
 
-source app.header.sh
+if [ ! -f $HOME/GIT/dockworker/s_public_tools/app.tools.sh ]; then
+  git clone git@gitlab.com:dockworker/s_public_tools.git $HOME/GIT/dockworker/s_public_tools/
+fi
+source $HOME/GIT/dockworker/s_public_tools/app.header.sh
 
   #== Check/Set arguments ==#
   [[ $# -gt 2 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
