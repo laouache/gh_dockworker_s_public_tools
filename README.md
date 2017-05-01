@@ -1,9 +1,9 @@
 https://gitlab.com/dockworker/s_public_tools
   
 ### Table of Contents  
-**[Gitignore.](#gitignore)**  
-**[LICENSE.](#license)**  
-**[README.](#readmemd)**  
+**[gitignore](#gitignore)**  
+**[LICENSE](#license)**  
+**[README](#readmemd)**  
 
 ## gitignore
 
@@ -14,60 +14,9 @@ Automatically generated with :
  
 ## LICENSE
 
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)  
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)  
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)  
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
-[LICENSE](https://gitlab.com/dockworker/s_public_tools/LICENSE)
+[LICENSE](LICENSE)  
 
 ## README.md
 
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
-THIS README
 THIS README
 
