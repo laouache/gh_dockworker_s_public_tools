@@ -2,9 +2,9 @@ https://gitlab.com/dockworker/s_public_tools
 
 ### Table of Contents
 
-[gitignore](#gitignore)
-[LICENSE](#license)
-[README](#readme.md)
+**[gitignore](#gitignore)**
+**[LICENSE](#license)**
+**[README](#readme-md)**
 
 ## gitignore
 
